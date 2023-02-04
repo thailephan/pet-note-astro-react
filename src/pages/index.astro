@@ -1,0 +1,12 @@
+---
+import "../assets/global.css";
+import Layout from "../layouts/Layout.astro";
+import Todos from "../components/Todos";
+---
+
+<Layout title="Welcome to Astro.">
+	<Todos client:only="react" />
+</Layout>
+
+<style>
+</style>
