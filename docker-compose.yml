@@ -1,9 +1,22 @@
 version: '3.8'
 
 services:
-  app: 
+
+  nginx:
+    image: nginx:1.23.3-alpine
+    container_name: nginx 
+    hostname: nginx
+    ports:
+      - "80:80" 
+      - "433:433"
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - astro-notee
+
+  astro-notee: 
     image: registry.gitlab.com/thailephan-opensource/pet-note-astro-react:latest
-    container_name: app
-    hostname: app
+    container_name: astro-notee
+    hostname: astro-notee
     ports:
       - "3000:80" 
