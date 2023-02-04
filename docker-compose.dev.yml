@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "registry.gitlab.com/thailephan-opensource/pet-note-astro-react:dev"
+    container_name: app
+    hostname: app
+    ports:
+      - "3000:80"

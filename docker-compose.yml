@@ -2,12 +2,6 @@ version: '3.8'
 
 services:
   app: 
-    build:
-      context: .
-      dockerfile: Dockerfile
-      tags:
-        - "registry.gitlab.com/thailephan-opensource/pet-note-astro-react:latest"
-        - "registry.gitlab.com/thailephan-opensource/pet-note-astro-react:local"
     image: registry.gitlab.com/thailephan-opensource/pet-note-astro-react:latest
     container_name: app
     hostname: app
