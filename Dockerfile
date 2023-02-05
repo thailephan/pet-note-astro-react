@@ -6,7 +6,7 @@ COPY package*.json yarn*.lock ./
 
 # RUN npm install
 # If you are building your code for production
-RUN npm install --omit=dev
+RUN npm install --omit=dev --silent
 
 COPY . .
 

@@ -1,6 +1,15 @@
 stages:
+  - linting
   - build
   - deploy
+
+hadolint:
+  stage: linting
+  image: registry.gitlab.com/pipeline-components/hadolint:latest
+  only:
+    - Dockerfile
+  script:
+    - hadolint Dockerfile
 
 build-docker-image:
   stage: build
