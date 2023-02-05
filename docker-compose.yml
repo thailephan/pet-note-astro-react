@@ -10,8 +10,10 @@ services:
       - "80:80" 
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./self-generate-private-key.pem:/etc/nginx/ssl/nginx.key:ro
       - ./self-generate-public-key.pem:/etc/nginx/ssl/nginx.crt:ro
+      - ./self-generate-private-key.pem:/etc/nginx/ssl/nginx.key:ro
+      - ./cloudflare-public-key.pem:/etc/nginx/ssl/nginx-cloudflare.crt:ro
+      - ./cloudflare-private-key.pem:/etc/nginx/ssl/nginx-cloudflare.key:ro
     depends_on:
       - astro-notee
     networks:
