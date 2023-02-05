@@ -1,0 +1,44 @@
+stages:
+  - build
+  - deploy
+
+build-docker-image:
+  stage: build
+  image: docker:19
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+#   Pull latest image for caching (create image faster), return true mean if cananot pull, but no problem, whatever
+# Co' thi cache k thi' thoi
+    - docker pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest --tag $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest .
+    - docker push $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+  after_script:
+    - docker logout $CI_REGISTRY
+  only:
+    changes:
+      - "src/**/*"
+      - "astro.config.mjs"
+      - "Dockerfile"
+      - .gitlab-ci.yml
+    refs:
+      - master
+
+deploy-server:
+  stage: deploy
+  script:
+    - >
+      ssh -i ./aws-southeast.pem ubuntu@52.221.250.7
+      && docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      && docker-compose down
+      && docker-compose pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+      && docker-compose up -d
+  only:
+    changes:
+      - "src/**/*"
+      - "astro.config.mjs"
+      - "Dockerfile"
+      - .gitlab-ci.yml
