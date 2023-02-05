@@ -22,6 +22,7 @@ build-docker-image:
   only:
     changes:
       - "src/**/*"
+      - "tsconfig.json"
       - "astro.config.mjs"
       - "Dockerfile"
       - .gitlab-ci.yml
@@ -39,6 +40,7 @@ deploy:
       - "Dockerfile"
       - "docker-compose.yml"
       - .gitlab-ci.yml
+      - nginx.conf
     refs:
       - master
   before_script:
