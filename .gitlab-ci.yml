@@ -23,7 +23,7 @@ build-docker-image:
       - "src/**/*"
       - "astro.config.mjs"
       - "Dockerfile"
-      # - .gitlab-ci.yml
+      - .gitlab-ci.yml
     refs:
       - master
 
