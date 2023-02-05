@@ -23,7 +23,7 @@ build-docker-image:
       - "src/**/*"
       - "astro.config.mjs"
       - "Dockerfile"
-      - .gitlab-ci.yml
+      # - .gitlab-ci.yml
     refs:
       - master
 
@@ -32,10 +32,10 @@ deploy-server:
   script:
     - >
       ssh -i ./aws-southeast.pem ubuntu@52.221.250.7
-      && docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+      "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
       && docker-compose down
       && docker-compose pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-      && docker-compose up -d
+      && docker-compose up -d"
   only:
     changes:
       - "src/**/*"
