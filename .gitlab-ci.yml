@@ -27,23 +27,46 @@ build-docker-image:
     refs:
       - master
 
-deploy-server:
-  image: alpine:latest
+deploy:
   stage: deploy
-  script:
-    - >
-      ssh -i $ID_RSA $SERVER_USER@$SERVER_IP
-      "cd ~/code/personal/pet-note-astro-react
-      && git pull origin master
-      && docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-      && docker-compose down
-      && docker-compose pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-      && docker-compose up -d"
+  variables:
+    GIT_STRATEGY: none
   only:
     changes:
       - "src/**/*"
       - "astro.config.mjs"
       - "Dockerfile"
+      - "docker-compose.yml"
       - .gitlab-ci.yml
     refs:
       - master
+  before_script:
+    - apk update && apk add openssh-client bash
+  script:
+    # chạy ssh-agent tương ứng với Gitlab Runner hiện tại
+    - eval $(ssh-agent -s)
+
+    # thêm nội dung của biến SSH_PRIVATE_KEY vào agent store
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    
+    # tạo folder ~/.ssh
+    - mkdir -p ~/.ssh
+    
+    # Scan lấy SSH Host key cho địa chỉ IP server
+    # Được kết quả bao nhiêu thì thêm vào file known_hosts
+    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+    
+    # Sửa lại quyền của file known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    
+    # Thực hiện SSH vào server, login vào Registry, chuyển tới folder project
+    # Down project, pull image về, up project và xoá đi image cũ
+    - >
+      ssh $SSH_USER@$SSH_SERVER_IP
+      "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};
+      cd ${PATH_TO_PROJECT};
+      docker-compose down;
+      git pull origin master;
+      docker pull ${CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG}:latest;
+      docker-compose up -d;
+      docker image prune -f;"
