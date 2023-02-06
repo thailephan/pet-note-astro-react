@@ -1,0 +1,19 @@
+---
+const { name } = Astro.props;
+const product = await fetch('https://fakestoreapi.com/products/1')
+            .then(res=>res.json())
+---
+
+<div>
+    Received Props:
+        - name: {name}
+    <ul>
+        <li>Xin chào</li>
+        <li>Hi</li>
+        <li>Konichiwa</li>
+    </ul>
+
+    <div>
+        {product.id}
+    </div>
+</div>

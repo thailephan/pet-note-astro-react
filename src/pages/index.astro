@@ -2,10 +2,14 @@
 import "../assets/global.css";
 import Layout from "../layouts/Layout.astro";
 import Todos from "../components/Todos";
+import AnimalList from "../components/animalList.astro";
+import LoadDatawithJs from "../components/loadDatawithJs.astro";
 ---
 
 <Layout title="Welcome to Astro.">
 	<Todos client:only="react" />
+	<AnimalList name="Peper" />
+	<LoadDatawithJs />
 </Layout>
 
 <style>

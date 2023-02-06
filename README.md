@@ -1,3 +1,14 @@
+# Astro React Todo
+Simple todo application that made with astro framework and React UI framework
+
+### CI/CD
+`Deploy` stage: must add some **variables** into gitlab for secure use ($SSH_USER, $SSH_SERVER_IP, $PATH_TO_PROJECT)
+
+### Yaml
+- Luôn sử dụng `${<variable-name>}` thay vì `$<variable-name>` bởi đôi khi viết trong chuỗi thì nó `$<variable-name>` sẽ bị hiểu nhầm
+là nội dung của text nên không lấy giá trị được
+
+---
 # Astro Starter Kit: Basics
 
 ```

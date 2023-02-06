@@ -1,0 +1,16 @@
+---
+---
+
+<div>
+    <span id="text"></span>
+</div>
+
+<script>
+    fetch('https://fakestoreapi.com/products/1')
+            .then(res=>res.json()).then(product => {
+                const textSpan = document.getElementById("text");
+                if (textSpan) {
+                    textSpan.innerHTML = product.title
+                }
+            });
+</script>
