@@ -1,0 +1,20 @@
+---
+import CaroGame from "../components/caro";
+---
+
+<div class="container">
+    <CaroGame client:only="react" />
+</div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #F0F2F5;
+        gap: 8px;
+        overflow: auto;
+        width: 100vw;
+        padding: 2rem;
+    }
+</style>
