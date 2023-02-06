@@ -1,0 +1,14 @@
+---
+import "../assets/global.css";
+import Todos from "../components/Todos";
+import AnimalList from "../components/animalList.astro";
+import LoadDatawithJs from "../components/loadDatawithJs.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Todo">
+	<a href="/">Về trang điều hướng</a>
+	<Todos client:only="react" />
+	<AnimalList name="Peper" />
+	<LoadDatawithJs />
+</Layout>

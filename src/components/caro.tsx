@@ -5,6 +5,7 @@ const boardSize = 5;
 function Button({ disabled, style = {}, children, onClick }) {
     return (
         <button
+            disabled={disabled}
             style={{
                 border: "none",
                 width: 24,
@@ -188,6 +189,9 @@ export default function CaroGame() {
 
     return (
         <div className="App">
+            <div>
+                {!winner && <span>Lượt đi của {isCurrentXTurn ? "X" : "O"}</span>}
+            </div>
             <div
                 style={{
                     display: "flex",
@@ -232,6 +236,7 @@ export default function CaroGame() {
                                 return (
                                     <Button
                                         key={index + rowIndex.toString()}
+                                        disabled={!isGameStarted}
                                         style={{
                                             background: "#aaaaaa"
                                         }}
@@ -246,13 +251,13 @@ export default function CaroGame() {
                                                     tiles[index][rowIndex] = 1;
                                                     return [...tiles];
                                                 });
-                                                setisCurrentXTurn((isCurrentXTurn) => false);
+                                                setisCurrentXTurn(false);
                                             } else {
                                                 setTiles((tiles) => {
                                                     tiles[index][rowIndex] = 2;
                                                     return [...tiles];
                                                 });
-                                                setisCurrentXTurn((isCurrentXTurn) => true);
+                                                setisCurrentXTurn(true);
                                             }
                                         }}
                                     ></Button>

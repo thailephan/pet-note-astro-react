@@ -1,13 +1,21 @@
 ---
 import CaroGame from "../components/caro";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<div class="container">
-    <CaroGame client:only="react" />
-</div>
+<Layout title="Caro game">
+    <div class="container">
+        <a href="/">Về trang điều hướng</a>
+        <span>Ai đạt 3 con thẳng hàng trước là thắng</span>
+        <div>
+            <CaroGame client:only="react" />
+        </div>
+    </div>
+</Layout>
 
 <style>
     .container {
+        flex-direction: column;
         display: flex;
         justify-content: center;
         align-items: center;

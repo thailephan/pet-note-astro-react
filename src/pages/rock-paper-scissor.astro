@@ -1,0 +1,173 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Kéo búa bao">
+	<a href="/">Về trang điều hướng</a>
+    <div class="root">
+        <div class="game-container">
+            <div id="computer">
+                <span>Máy chọn:</span>
+                <span id="choice"></span>
+            </div>
+
+            <div id="player">
+                <span>Bạn chọn:</span>
+                <button id="scissor">Kéo</button>
+                <button id="rock">Búa</button>
+                <button id="paper">Bao</button>
+            </div>
+
+            <span id="result"></span>
+        </div>
+        <div
+            style={{
+                height: "200px",
+            }}
+        >
+            <span>Danh sách kết quả:</span>
+            <div
+                style={{
+                    height: "100%",
+                    overflow: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                    padding: "1rem",
+                    border: "1px solid orange",
+                }}
+                id="result-history"
+            >
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .root {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 500px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .game-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem;
+        align-items: center;
+    }
+
+    .chosen {
+        background: teal;
+        color: white;
+    }
+</style>
+
+<script>
+    // 0: Scissor
+    // 1: Rock
+    // 2: Paper
+
+    import type { log } from "astro/dist/core/logger/core";
+
+    const playerScissor = document.querySelector(
+        ".root #player #scissor"
+    ) as HTMLButtonElement;
+    const playerRock = document.querySelector(
+        ".root #player #rock"
+    ) as HTMLButtonElement;
+    const playerPaper = document.querySelector(
+        ".root #player #paper"
+    ) as HTMLButtonElement;
+
+    const computerChoice = document.querySelector(
+        ".root #choice"
+    ) as HTMLSpanElement;
+
+    const displayResultElement = document.querySelector(
+        "#result"
+    ) as HTMLSpanElement;
+
+    const resultHistoryElement = document.querySelector(
+        "#result-history"
+    ) as HTMLDivElement;
+
+    const player = [playerScissor, playerRock, playerPaper];
+    player.forEach((choiceElement: HTMLButtonElement | null, index: number) => {
+        choiceElement?.addEventListener("click", (e) => getResult(e, index));
+    });
+
+    function getResult(e: MouseEvent, playerChoice: number) {
+        player.forEach(
+            (choiceElement: HTMLButtonElement | null, index: number) => {
+                if (choiceElement) {
+                    const arrClassName = choiceElement.className.split(" ");
+                    choiceElement.className = arrClassName
+                        .filter((name) => name !== "chosen")
+                        .join(" ");
+
+                    if (choiceElement === e.target) {
+                        choiceElement.className += " " + "chosen";
+                    }
+                }
+            }
+        );
+
+        function random() {
+            return Math.round(Math.random() * 10) % 3;
+        }
+
+        const comChoice = random();
+
+        if (computerChoice) {
+            computerChoice.innerText = getTextFromNumber(comChoice);
+        }
+
+        let resultText = "Bạn thua";
+
+        // Win case
+        if ((playerChoice + 3 - comChoice) % 3 === 1) {
+            resultText = "Bạn thắng";
+            // Draw case
+        } else if (playerChoice === comChoice) {
+            resultText = "Bạn hòa";
+            // Fail case
+        }
+
+        if (displayResultElement) {
+            displayResultElement.innerText = resultText;
+        } else {
+            console.log(resultText);
+        }
+
+        if (resultHistoryElement) {
+            const newResultHisotyrText =
+                resultHistoryElement.childElementCount +
+                1 +
+                ") C: " +
+                getTextFromNumber(comChoice) +
+                ", P: " +
+                getTextFromNumber(playerChoice) +
+                ", KQ: " +
+                resultText;
+            const newSpanElement = document.createElement("span");
+            newSpanElement.innerText = newResultHisotyrText;
+
+            resultHistoryElement.prepend(newSpanElement);
+        }
+    }
+
+    function getTextFromNumber(num: number): string {
+        return num === 0
+            ? "Kéo"
+            : num === 1
+            ? "Búa"
+            : num === 2
+            ? "Bao"
+            : num.toString();
+    }
+</script>
